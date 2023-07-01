@@ -19,3 +19,8 @@ gempa_per_tahun = df_gempa_filtered["time"].dt.year.value_counts()
 # Menampilkan jumlah kejadian gempa per tahun
 print("Jumlah kejadian gempa per tahun:")
 print(gempa_per_tahun)
+print()
+
+# Menampilkan rata-rata gempa per tahun
+print("Rata-rata gempa per tahun:")
+print(gempa_per_tahun.mean())
