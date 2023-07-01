@@ -59,59 +59,6 @@ for index, row in df_gempa.iterrows():
     # Menambahkan magnitudo gempa pada provinsi terdekat
     df_provinsi.at[nearest_provinsi_index, "Total Magnitudo"] += gempa_magnitude
 
-# Mengurutkan provinsi berdasarkan jumlah gempa secara menurun
-df_provinsi_terbanyak = df_provinsi.sort_values(
-    by="Jumlah Gempa", ascending=False
-).head(1)
-
-# Menghitung rata-rata magnitudo gempa di provinsi terbanyak
-provinsi_terbanyak_index = df_provinsi_terbanyak.index[0]
-total_gempa_terbanyak = df_provinsi_terbanyak.at[
-    provinsi_terbanyak_index, "Jumlah Gempa"
-]
-total_magnitudo_terbanyak = df_provinsi_terbanyak.at[
-    provinsi_terbanyak_index, "Total Magnitudo"
-]
-rata_rata_magnitudo = total_magnitudo_terbanyak / total_gempa_terbanyak
-
-# Menampilkan provinsi dengan jumlah gempa terbanyak dan rata-rata magnitudo gempa
-print("Provinsi dengan jumlah gempa terbanyak:")
-print(df_provinsi_terbanyak[["name", "Jumlah Gempa"]])
-print(
-    "Rata-rata magnitudo gempa di provinsi tersebut: {:.2f} SR".format(
-        rata_rata_magnitudo
-    )
-)
-print()
-
-# Menampilkan gempa dengan magnitudo paling besar dan provinsi tempat terjadinya
-gempa_terbesar_index = df_gempa["mag"].idxmax()
-gempa_terbesar_magnitudo = df_gempa.at[gempa_terbesar_index, "mag"]
-gempa_terbesar_lat = df_gempa.at[gempa_terbesar_index, "latitude"]
-gempa_terbesar_lon = df_gempa.at[gempa_terbesar_index, "longitude"]
-gempa_terbesar_time = df_gempa.at[gempa_terbesar_index, "time"]
-
-# Mencari provinsi tempat terjadinya gempa dengan menggunakan Haversine
-distances_gempa_terbesar = df_provinsi.apply(
-    lambda provinsi: haversine(
-        gempa_terbesar_lat,
-        gempa_terbesar_lon,
-        provinsi["latitude"],
-        provinsi["longitude"],
-    ),
-    axis=1,
-)
-nearest_provinsi_gempa_terbesar_index = distances_gempa_terbesar.idxmin()
-provinsi_gempa_terbesar = df_provinsi.at[nearest_provinsi_gempa_terbesar_index, "name"]
-
-print("Gempa dengan magnitudo paling besar:")
-print("Magnitudo: {:.2f} SR".format(gempa_terbesar_magnitudo))
-print("Provinsi: {}".format(provinsi_gempa_terbesar))
-print("Latitude: {:.2f}".format(gempa_terbesar_lat))
-print("Longitude: {:.2f}".format(gempa_terbesar_lon))
-print("Waktu: {}".format(gempa_terbesar_time))
-print()
-
 # Menampilkan urutan gempa terbanyak di provinsi
 urutan_gempa_terbanyak = df_provinsi.sort_values(
     by="Jumlah Gempa", ascending=False
